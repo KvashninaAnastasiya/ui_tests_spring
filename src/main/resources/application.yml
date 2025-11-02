@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: ui_tests_spring
+app:
+  loginBase: "https://the-internet.herokuapp.com"
+  feedbackBase: "https://demoqa.com/text-box"
+  headless: false
+  timeoutMs: 8000

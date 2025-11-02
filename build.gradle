@@ -1,0 +1,44 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.3'
+	id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.example'
+version = '1.0.0'
+
+java {
+	toolchain { languageVersion = JavaLanguageVersion.of(17) }
+}
+
+repositories { mavenCentral() }
+
+ext {
+	selenideVersion = '7.5.1'
+	assertjVersion  = '3.26.3'
+	junitVersion    = '5.10.2'
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation "com.codeborne:selenide:${selenideVersion}"
+	testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
+	testImplementation "com.codeborne:selenide:${selenideVersion}"
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation "org.assertj:assertj-core:${assertjVersion}"
+}
+
+tasks.test {
+	useJUnitPlatform()
+	systemProperty "app.headless",  System.getProperty("app.headless", "false")
+	systemProperty "app.timeoutMs", System.getProperty("app.timeoutMs", "8000")
+
+	systemProperty "selenide.remote",  System.getenv("SELENIDE_REMOTE")  ?: ""
+	systemProperty "selenide.browser", System.getenv("SELENIDE_BROWSER") ?: "chrome"
+	systemProperty "selenide.timeout", System.getenv("SELENIDE_TIMEOUT") ?: "10000"
+
+	testLogging {
+		events "passed", "failed", "skipped"
+		exceptionFormat "short"
+	}
+}
